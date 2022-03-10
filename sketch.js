@@ -1,5 +1,5 @@
 let CERTAINTY_THRESHOLD = 0.0; // threshold for plotting the keypoints
-let MIRROR_VIDEO_FEED = true;
+let MIRROR_VIDEO_FEED = false;
 let SHOW_NUMBERS = true;
 let SHOW_SKELETON = true;
 let DEBUG_MODE = true;
@@ -8,11 +8,11 @@ let ACTIVATION_FUNCTION = identityFunction;
 
 let video;
 let poseNet;
-let textField; // text to the right of the video (available in DEBUG_MODE)
+let textField; 
 let overallCertainty = 0.0;
 let keypoints = [];
 let infoCount = 1;
-let getInPositionTimer = 10;
+let getInPositionTimer = 5;
 let elbowline = -1;
 let wristline = -1;
 let ElbowLine = -1;
@@ -41,7 +41,9 @@ function setup() {
   poseNet.on('pose', gotPoses);
   
   if (DEBUG_MODE == true) {
-    textField = createDiv('SkyCliff Demo:');
+    textField = createDiv('SkyCliff Demo');
+    textField.style('color', '#ffffff');
+    textField.style('font-size', '32px');
     textField.position(650,0);
     textField.size(320,480);
   } else {
@@ -60,7 +62,7 @@ function setup() {
       }
     }
   }
-  setInterval(updateTimer,500);
+  setInterval(updateTimer,1000);
 }
 
 function gotPoses(poses) {
@@ -80,6 +82,20 @@ function gotPoses(poses) {
       keypoints[i].update(pose.keypoints[i].position.x,pose.keypoints[i].position.y,pose.keypoints[i].score,pose.keypoints[i].part);
     }
     
+  e = createVector(keypoints[8].x,keypoints[8].y)
+  s = createVector(keypoints[6].x,keypoints[6].y)
+  w = createVector(keypoints[10].x,keypoints[10].y)
+
+  ac = e.dist(s)
+  ab = e.dist(w)
+  bc = w.dist(s)
+
+  out = Math.acos((ac*ac + ab*ab - bc*bc)/(2*ac*ab)) *  (180/Math.PI)
+  text('elbow angle : ' + out + degrees(out).toFixed(2) , 10,70,90,90 );
+  textSize(16);
+  fill(255, 0, 0);
+  console.log("ANGLE: ", out, " degrees" )
+
   }
 }
 
