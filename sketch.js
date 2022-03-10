@@ -15,15 +15,11 @@ let infoCount = 1;
 let getInPositionTimer = 10;
 let elbowline = -1;
 let wristline = -1;
-let shoulderLine = -1;
 let ElbowLine = -1;
 let upperHelpLine = -1;
 let lowerHelpLine = -1;
-let hipLine = -1;
 let WristLine = -1;
-let squatCount = 0;
 let curlCount = 0;
-let shouldersBelowLowerLine = false;
 let ElbowBelowLowerLine = false;
 let WristAboveUpperLine = false;
 let rwristX,rwristY; 
@@ -154,34 +150,6 @@ function draw() {
 
 
 
-function receivedPoses(poses){
-  console.log(poses);
-
-  if(poses.length > 0){
-      singlePose = poses[0].pose;
-      skeleton = poses[0].skeleton;
-      rwristX = singlePose.rightWrist.x
-      let myDegrees = map(rwristX, 0, width, 0, 360);
-      let readout = 'angle = ' + nfc(myDegrees, 1) + '\xB0';
-      noStroke();
-      fill(0);
-      text(readout, 15, 45);
-      let v = p5.Vector.fromAngle(radians(myDegrees), 30);
-      let vx = v.x;
-      let vy = v.y;
-
-      push();
-      translate(width / 2, height / 2);
-      noFill();
-      stroke(150);
-      line(0, 0, 30, 0);
-      stroke(0);
-      line(0, 0, vx, vy);
-      pop();
-  }
-}
-
-
 function updateCurlCount() {
   // try to detect the Elbow
   // let leftElbow = keypoints[7];
@@ -235,15 +203,15 @@ function drawElbowsAndWrists() {
     }
   }
   
-  // draw hips and shoulder lines if possible
+  // draw Wrist and Elbow lines if possible
   
   if (ElbowDetected == true && WristDetected == true) {
     push();
     stroke('red');
     
-    line(0,ElbowLine,width,ElbowLine); // draws shoulders
+    line(0,ElbowLine,width,ElbowLine); // draws Elbow
     
-    line(0,WristLine,width,WristLine); // draws hips
+    line(0,WristLine,width,WristLine); // draws Wrist
     
     // draws area inbetween
     noStroke();
