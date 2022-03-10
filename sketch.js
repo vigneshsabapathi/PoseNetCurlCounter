@@ -150,6 +150,34 @@ function draw() {
 
 
 
+function receivedPoses(poses){
+  console.log(poses);
+
+  if(poses.length > 0){
+      singlePose = poses[0].pose;
+      skeleton = poses[0].skeleton;
+      rwristX = singlePose.rightWrist.x
+      let myDegrees = map(rwristX, 0, width, 0, 360);
+      let readout = 'angle = ' + nfc(myDegrees, 1) + '\xB0';
+      noStroke();
+      fill(0);
+      text(readout, 15, 45);
+      let v = p5.Vector.fromAngle(radians(myDegrees), 30);
+      let vx = v.x;
+      let vy = v.y;
+
+      push();
+      translate(width / 2, height / 2);
+      noFill();
+      stroke(150);
+      line(0, 0, 30, 0);
+      stroke(0);
+      line(0, 0, vx, vy);
+      pop();
+  }
+}
+
+
 function updateCurlCount() {
   // try to detect the Elbow
   // let leftElbow = keypoints[7];
